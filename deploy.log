@@ -1,0 +1,57 @@
+<claude-code-hint v="1" type="plugin" value="vercel@claude-plugins-official" />
+The "--name" option is deprecated (https://vercel.link/name-flag)
+Loading scopes…
+Searching for existing projects…
+> No framework detected. Default Project Settings:
+
+- Build Command: `npm run vercel-build` or `npm run build`
+- Development Command: None
+- Install Command: `yarn install`, `pnpm install`, `npm install`, or `bun install`
+- Output Directory: `public` if it exists, or `.`
+Linked to iqram-jellyjellycs-projects/genie-nori-baby (created .vercel and added it to .gitignore)
+> Connecting GitHub repository: https://github.com/iqramjelly/nori-baby
+Error: Failed to connect iqramjelly/nori-baby to project. Make sure there aren't any typos and that you have access to the repository if it's private.
+Deploying iqram-jellyjellycs-projects/genie-nori-baby
+Uploading [--------------------] (0.0B/128.6KB)
+Uploading [=======-------------] (48.1KB/128.6KB)
+Uploading [============--------] (80.1KB/128.6KB)
+Uploading [=================---] (112.1KB/128.6KB)
+Uploading [====================] (128.6KB/128.6KB)
+Inspect: https://vercel.com/iqram-jellyjellycs-projects/genie-nori-baby/3DdzNQ3hscjQAqYXKHdzJEiiqBMw [2s]
+Production: https://genie-nori-baby-f3bbrf8me-iqram-jellyjellycs-projects.vercel.app [2s]
+Building...
+Building...
+Building: Running build in Washington, D.C., USA (East) – iad1
+Building: Build machine configuration: 2 cores, 8 GB
+Building: Retrieving list of deployment files...
+Building: Previous build caches not available.
+Building: Downloading 3 deployment files...
+Building: Running "vercel build"
+Building: Vercel CLI 51.6.1
+Building: Build Completed in /vercel/output [16ms]
+Building: Deploying outputs...
+[2K[1A[2K[GProduction: https://genie-nori-baby-f3bbrf8me-iqram-jellyjellycs-projects.vercel.app [6s]
+Completing...
+Aliased: https://genie-nori-baby.vercel.app [6s]
+{
+  "status": "ok",
+  "deployment": {
+    "id": "dpl_3DdzNQ3hscjQAqYXKHdzJEiiqBMw",
+    "url": "https://genie-nori-baby-f3bbrf8me-iqram-jellyjellycs-projects.vercel.app",
+    "inspectorUrl": "https://vercel.com/iqram-jellyjellycs-projects/genie-nori-baby/3DdzNQ3hscjQAqYXKHdzJEiiqBMw",
+    "readyState": "READY",
+    "target": "production",
+    "deploymentApiUrl": "https://api.vercel.com/v13/deployments/dpl_3DdzNQ3hscjQAqYXKHdzJEiiqBMw"
+  },
+  "message": "Deployment genie-nori-baby-f3bbrf8me-iqram-jellyjellycs-projects.vercel.app ready.",
+  "next": [
+    {
+      "command": "vercel inspect genie-nori-baby-f3bbrf8me-iqram-jellyjellycs-projects.vercel.app",
+      "when": "Inspect deployment"
+    },
+    {
+      "command": "vercel deploy --prod",
+      "when": "Promote to production"
+    }
+  ]
+}

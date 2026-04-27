@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Noori's Getting a Brother or a Sister??</title>
   <meta property="og:title" content="Noori's Getting a Brother or a Sister??" />
-  <meta property="og:description" content="A new sibling is on the way — make your pick and text Jimmy!" />
+  <meta property="og:description" content="A new sibling is on the way — cast your vote and text Jimmy!" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -25,7 +26,6 @@
       overflow-x: hidden;
     }
 
-    /* ---- HEADER ---- */
     .header-bar {
       background: var(--tru-red);
       padding: 14px 20px;
@@ -58,7 +58,6 @@
       font-family: 'Fredoka One', cursive;
       font-size: 2.8rem;
       color: var(--tru-blue);
-      text-shadow: 0 0 0 3px var(--tru-white);
       transform: rotate(-12deg);
       display: inline-block;
       margin: 0 4px;
@@ -81,7 +80,6 @@
       text-transform: uppercase;
     }
 
-    /* ---- MAIN ---- */
     .container {
       max-width: 680px;
       margin: 0 auto;
@@ -91,27 +89,176 @@
       z-index: 1;
     }
 
-    /* floating price tags */
-    .price-tag {
-      position: fixed;
-      background: var(--tru-red);
-      color: white;
+    /* ---- JELLY EMBED ---- */
+    .jelly-embed-section {
+      margin: 0 0 28px;
+    }
+
+    .jelly-label {
       font-family: 'Fredoka One', cursive;
-      font-size: 0.8rem;
-      padding: 8px 14px;
+      font-size: 1rem;
+      color: var(--tru-red);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    .jelly-video-wrap {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #000;
+      box-shadow: 0 0 0 4px var(--tru-red), 0 0 0 8px var(--tru-yellow), 0 10px 30px rgba(0,0,0,0.25);
+      aspect-ratio: 9/16;
+      max-height: 420px;
+      margin: 0 auto;
+      max-width: 240px;
+    }
+
+    .jelly-video-wrap video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .jelly-fallback {
+      display: none;
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .jelly-fallback img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .jelly-fallback a {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.4);
+      text-decoration: none;
+    }
+
+    .play-btn {
+      width: 64px; height: 64px;
+      background: var(--tru-red);
       border-radius: 50%;
-      width: 70px; height: 70px;
       display: flex; align-items: center; justify-content: center;
-      text-align: center;
-      opacity: 0.18;
-      pointer-events: none;
-      z-index: 0;
-      line-height: 1.2;
+      font-size: 1.8rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      transition: transform 0.12s;
+    }
+
+    .play-btn:hover { transform: scale(1.1); }
+
+    /* ---- RESULTS LIVE BANNER ---- */
+    .live-results {
+      background: var(--tru-white);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 0 4px var(--tru-blue), 0 6px 20px rgba(0,0,0,0.1);
+    }
+
+    .live-results-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.1rem;
+      color: #111;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .live-dot {
+      width: 8px; height: 8px;
+      background: #00c853;
+      border-radius: 50%;
+      animation: pulse-dot 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.7); }
+    }
+
+    .vote-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .vote-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .vote-bar-label {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1rem;
+      min-width: 80px;
+      text-align: right;
+    }
+
+    .vote-bar-label.boy { color: var(--tru-blue); }
+    .vote-bar-label.girl { color: #FF5BAE; }
+
+    .vote-bar-track {
+      flex: 1;
+      height: 28px;
+      background: #f0f0f0;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .vote-bar-fill {
+      height: 100%;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 10px;
+      font-family: 'Fredoka One', cursive;
+      font-size: 0.85rem;
+      color: white;
+      min-width: 40px;
+      transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .vote-bar-fill.boy-fill  { background: var(--tru-blue); }
+    .vote-bar-fill.girl-fill { background: #FF5BAE; }
+
+    .total-votes {
+      font-size: 0.8rem;
+      color: #888;
+      margin-top: 6px;
+    }
+
+    .results-url-row {
+      margin-top: 10px;
+    }
+
+    .results-url-row a {
+      font-family: 'Fredoka One', cursive;
+      font-size: 0.82rem;
+      color: var(--tru-blue);
+      text-decoration: none;
+      padding: 4px 12px;
+      border: 2px solid var(--tru-blue);
+      border-radius: 20px;
+      display: inline-block;
     }
 
     /* ---- TITLE ---- */
     .main-title {
-      margin: 28px 0 20px;
+      margin: 20px 0 16px;
     }
 
     .main-title .t1 {
@@ -133,7 +280,7 @@
     /* ---- PHOTO ---- */
     .photo-ring {
       margin: 0 auto 12px;
-      width: 240px; height: 240px;
+      width: 200px; height: 200px;
       border-radius: 50%;
       padding: 6px;
       background: conic-gradient(
@@ -146,9 +293,7 @@
       animation: spin-ring 8s linear infinite;
     }
 
-    @keyframes spin-ring {
-      to { transform: rotate(360deg); }
-    }
+    @keyframes spin-ring { to { transform: rotate(360deg); } }
 
     .photo-inner {
       width: 100%; height: 100%;
@@ -166,14 +311,14 @@
 
     .nori-label {
       font-family: 'Fredoka One', cursive;
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       color: var(--tru-red);
       margin-bottom: 4px;
     }
 
     .intro-text {
       color: #222;
-      font-size: 1rem;
+      font-size: 0.95rem;
       line-height: 1.5;
       margin-bottom: 24px;
     }
@@ -182,27 +327,23 @@
     .picker-card {
       background: var(--tru-white);
       border-radius: 24px;
-      padding: 32px 20px;
-      box-shadow:
-        0 0 0 5px var(--tru-red),
-        0 0 0 10px var(--tru-yellow),
-        0 12px 40px rgba(0,0,0,0.15);
+      padding: 28px 20px;
+      box-shadow: 0 0 0 5px var(--tru-red), 0 0 0 10px var(--tru-yellow), 0 12px 40px rgba(0,0,0,0.15);
     }
 
     .picker-heading {
       font-family: 'Fredoka One', cursive;
-      font-size: 1.8rem;
+      font-size: 1.7rem;
       color: #111;
       margin-bottom: 6px;
     }
 
     .picker-sub {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: #555;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
 
-    /* ---- BIG BUTTONS ---- */
     .btn-row {
       display: flex;
       justify-content: center;
@@ -211,24 +352,30 @@
     }
 
     .pick-btn {
-      width: 160px; height: 170px;
+      width: 150px; height: 160px;
       border-radius: 22px;
       border: none;
       cursor: pointer;
       font-family: 'Fredoka One', cursive;
-      font-size: 1.35rem;
+      font-size: 1.25rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 12px;
+      gap: 8px;
       transition: transform 0.12s ease, box-shadow 0.12s ease;
       position: relative;
       top: 0;
       user-select: none;
     }
 
-    .pick-btn .em { font-size: 3.4rem; line-height: 1; }
+    .pick-btn .em { font-size: 3rem; line-height: 1; }
+    .pick-btn .vote-hint {
+      font-size: 0.7rem;
+      opacity: 0.8;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+    }
 
     .pick-btn.boy  { background: var(--tru-blue); color: #fff; box-shadow: 0 8px 0 #0070A0; }
     .pick-btn.girl { background: #FF5BAE; color: #fff; box-shadow: 0 8px 0 #B03070; }
@@ -237,10 +384,7 @@
     .pick-btn:active { top: 8px; box-shadow: none !important; }
 
     /* ---- SPINNER ---- */
-    .spinner-wrap {
-      display: none;
-      margin: 20px 0;
-    }
+    .spinner-wrap { display: none; margin: 20px 0; }
     .spinner-wrap.show { display: block; }
 
     .wheel {
@@ -263,10 +407,7 @@
     }
 
     /* ---- RESULT ---- */
-    .result-section {
-      display: none;
-      margin-top: 24px;
-    }
+    .result-section { display: none; margin-top: 20px; }
     .result-section.show {
       display: block;
       animation: popIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -279,42 +420,85 @@
 
     .result-card {
       border-radius: 20px;
-      padding: 28px 20px;
+      padding: 24px 16px;
     }
 
     .result-card.boy-card  { background: linear-gradient(140deg, #00A0E3 0%, #005F99 100%); color: #fff; }
     .result-card.girl-card { background: linear-gradient(140deg, #FF5BAE 0%, #C0206A 100%); color: #fff; }
 
-    .result-big-em { font-size: 4rem; margin-bottom: 8px; }
+    .result-big-em { font-size: 3.5rem; margin-bottom: 6px; }
 
     .result-headline {
       font-family: 'Fredoka One', cursive;
-      font-size: 2.2rem;
+      font-size: 2rem;
       line-height: 1.1;
       margin-bottom: 6px;
     }
 
     .result-note {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       opacity: 0.88;
+      margin-bottom: 14px;
+    }
+
+    /* ---- LIVE VOTE COUNT POST-PICK ---- */
+    .post-vote-counts {
+      background: rgba(255,255,255,0.15);
+      border-radius: 14px;
+      padding: 12px 16px;
+      margin-bottom: 10px;
+    }
+
+    .post-vote-counts .pvc-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+      opacity: 0.9;
+    }
+
+    .pvc-row {
+      display: flex;
+      justify-content: space-around;
+      gap: 12px;
+    }
+
+    .pvc-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .pvc-count {
+      font-family: 'Fredoka One', cursive;
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    .pvc-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      opacity: 0.85;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     /* ---- ACTION BUTTONS ---- */
     .action-row {
       display: flex;
-      gap: 14px;
+      gap: 10px;
       justify-content: center;
       flex-wrap: wrap;
-      margin-top: 18px;
+      margin-top: 14px;
     }
 
     .action-btn {
-      padding: 14px 26px;
+      padding: 12px 20px;
       border-radius: 50px;
       border: none;
       cursor: pointer;
       font-family: 'Fredoka One', cursive;
-      font-size: 1.05rem;
+      font-size: 0.95rem;
       transition: transform 0.12s, box-shadow 0.12s;
     }
 
@@ -339,14 +523,12 @@
       100% { transform: translateY(110vh) rotate(720deg) scaleX(1);  opacity: 0; }
     }
 
-    /* ---- FOOTER ---- */
     .footer {
       margin-top: 36px;
       font-size: 0.82rem;
       color: rgba(0,0,0,0.35);
     }
 
-    /* ---- DECORATIVE PRICE BUBBLES ---- */
     .bubble {
       position: fixed;
       width: 72px; height: 72px;
@@ -364,7 +546,6 @@
 </head>
 <body>
 
-<!-- Decorative background bubbles -->
 <div class="bubble" style="background:var(--tru-red);color:#fff;top:12%;left:2%">NEW BABY</div>
 <div class="bubble" style="background:var(--tru-blue);color:#fff;top:45%;right:1%">GUESS NOW</div>
 <div class="bubble" style="background:var(--tru-red);color:#fff;bottom:20%;left:1%">BOY OR GIRL?</div>
@@ -383,6 +564,46 @@
 
 <div class="container">
 
+  <!-- ORIGINAL JELLY EMBED -->
+  <div class="jelly-embed-section">
+    <div class="jelly-label">🎥 The Original Wish ✨</div>
+    <div class="jelly-video-wrap">
+      <video id="jellyVideo" controls playsinline muted></video>
+      <div class="jelly-fallback" id="jellyFallback">
+        <img id="jellyThumb" src="" alt="Noori's new sister announcement">
+        <a href="https://jellyjelly.com/watch/01KQ6H4E5AKW57QQTZ8JJN6ZSW" target="_blank" rel="noopener">
+          <div class="play-btn">▶️</div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIVE VOTE RESULTS (always visible) -->
+  <div class="live-results" id="liveResults">
+    <div class="live-results-title">
+      <span class="live-dot"></span>
+      LIVE VOTES
+    </div>
+    <div class="vote-bars">
+      <div class="vote-bar-row">
+        <span class="vote-bar-label boy">👦 Brother</span>
+        <div class="vote-bar-track">
+          <div class="vote-bar-fill boy-fill" id="brotherBar" style="width:50%">0</div>
+        </div>
+      </div>
+      <div class="vote-bar-row">
+        <span class="vote-bar-label girl">👧 Sister</span>
+        <div class="vote-bar-track">
+          <div class="vote-bar-fill girl-fill" id="sisterBar" style="width:50%">0</div>
+        </div>
+      </div>
+    </div>
+    <div class="total-votes" id="totalVotesLabel">Loading votes…</div>
+    <div class="results-url-row">
+      <a href="https://genie-nori-baby.vercel.app?results=true" id="resultsLink" target="_blank">📊 Share Results Page</a>
+    </div>
+  </div>
+
   <div class="main-title">
     <div class="t1">Noori's getting a</div>
     <div class="t2">brother or a sister??</div>
@@ -397,28 +618,29 @@
   <div class="nori-label">🐾 That's Noori! 🐾</div>
   <p class="intro-text">
     A new baby is joining the family — but <strong>nobody knows what it is yet!</strong><br>
-    You get to guess. Pick your prediction below, then<br>
-    screenshot &amp; text Jimmy your answer!
+    Cast your vote, then text Jimmy your prediction!
   </p>
 
   <div class="picker-card">
     <div class="picker-heading">🎉 Cast Your Vote! 🎉</div>
-    <p class="picker-sub">What do YOU think it is?</p>
+    <p class="picker-sub" id="pickerSub">What do YOU think it is?</p>
 
     <div class="btn-row" id="btnRow">
-      <button class="pick-btn boy" onclick="reveal('boy')">
+      <button class="pick-btn boy" onclick="reveal('brother')">
         <span class="em">👦</span>
         BABY<br>BROTHER!
+        <span class="vote-hint">tap to vote</span>
       </button>
-      <button class="pick-btn girl" onclick="reveal('girl')">
+      <button class="pick-btn girl" onclick="reveal('sister')">
         <span class="em">👧</span>
         BABY<br>SISTER!
+        <span class="vote-hint">tap to vote</span>
       </button>
     </div>
 
     <div class="spinner-wrap" id="spinnerWrap">
       <div class="wheel"></div>
-      <div class="spinner-label">Drumroll please…</div>
+      <div class="spinner-label">Counting your vote…</div>
     </div>
 
     <div class="result-section" id="resultSection">
@@ -426,6 +648,20 @@
         <div class="result-big-em" id="resultEm"></div>
         <div class="result-headline" id="resultHeadline"></div>
         <div class="result-note" id="resultNote"></div>
+
+        <div class="post-vote-counts" id="postVoteCounts">
+          <div class="pvc-title">📊 Everyone's votes so far:</div>
+          <div class="pvc-row">
+            <div class="pvc-item">
+              <span class="pvc-count" id="pvcBrother">—</span>
+              <span class="pvc-label">👦 Brother</span>
+            </div>
+            <div class="pvc-item">
+              <span class="pvc-count" id="pvcSister">—</span>
+              <span class="pvc-label">👧 Sister</span>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="action-row">
         <button class="action-btn btn-share" onclick="shareResult()">📱 Text Jimmy My Pick!</button>
@@ -438,39 +674,116 @@
 </div>
 
 <script>
-  var currentPick = '';
   var SITE_URL = 'https://genie-nori-baby.vercel.app';
+  var currentPick = '';
+  var currentVotes = { brother: 0, sister: 0 };
 
+  // ---- READ URL PARAMS ----
+  var params = new URLSearchParams(window.location.search);
+  var choiceParam = params.get('choice');
+  var resultsParam = params.get('results');
+
+  // If ?results=true, highlight the live results section
+  if (resultsParam) {
+    document.addEventListener('DOMContentLoaded', function() {
+      var lr = document.getElementById('liveResults');
+      if (lr) {
+        lr.style.borderColor = 'var(--tru-red)';
+        lr.style.boxShadow = '0 0 0 4px var(--tru-red), 0 6px 20px rgba(0,0,0,0.15)';
+        lr.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  }
+
+  // ---- LOAD VOTES ----
+  function loadVotes() {
+    fetch('/api/votes')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        currentVotes = data;
+        updateVoteBars(data);
+      })
+      .catch(function() {
+        updateVoteBars({ brother: 0, sister: 0 });
+      });
+  }
+
+  function updateVoteBars(votes) {
+    var total = (votes.brother || 0) + (votes.sister || 0);
+    var brotherPct = total > 0 ? Math.round((votes.brother / total) * 100) : 50;
+    var sisterPct  = total > 0 ? Math.round((votes.sister  / total) * 100) : 50;
+
+    var bb = document.getElementById('brotherBar');
+    var sb = document.getElementById('sisterBar');
+    var tl = document.getElementById('totalVotesLabel');
+    var pb = document.getElementById('pvcBrother');
+    var ps = document.getElementById('pvcSister');
+
+    if (bb) { bb.style.width = Math.max(brotherPct, 10) + '%'; bb.textContent = votes.brother || 0; }
+    if (sb) { sb.style.width = Math.max(sisterPct,  10) + '%'; sb.textContent = votes.sister  || 0; }
+    if (tl) {
+      if (total === 0) {
+        tl.textContent = 'No votes yet — be the first!';
+      } else {
+        tl.textContent = total + ' vote' + (total === 1 ? '' : 's') + ' total';
+      }
+    }
+    if (pb) pb.textContent = votes.brother || 0;
+    if (ps) ps.textContent = votes.sister  || 0;
+
+    currentVotes = votes;
+  }
+
+  // ---- VOTE & REVEAL ----
   function reveal(pick) {
     currentPick = pick;
     document.getElementById('btnRow').style.display = 'none';
     document.getElementById('spinnerWrap').classList.add('show');
 
+    // Submit vote to API
+    fetch('/api/votes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ choice: pick })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      currentVotes = data;
+      showResult(pick, data);
+    })
+    .catch(function() {
+      showResult(pick, currentVotes);
+    });
+  }
+
+  function showResult(pick, votes) {
     setTimeout(function() {
       document.getElementById('spinnerWrap').classList.remove('show');
 
-      var card      = document.getElementById('resultCard');
-      var em        = document.getElementById('resultEm');
-      var headline  = document.getElementById('resultHeadline');
-      var note      = document.getElementById('resultNote');
+      var card     = document.getElementById('resultCard');
+      var em       = document.getElementById('resultEm');
+      var headline = document.getElementById('resultHeadline');
+      var note     = document.getElementById('resultNote');
 
-      if (pick === 'boy') {
+      if (pick === 'brother') {
         card.className      = 'result-card boy-card';
         em.textContent      = '👦💙🎊';
         headline.textContent = "IT'S A BABY BROTHER!";
-        note.textContent    = "That's your pick! Screenshot this & text Jimmy below 👇";
+        note.textContent    = "Your pick is locked in! Text Jimmy below 👇";
         launchConfetti(['#00A0E3','#ffffff','#FFE000','#005F99']);
       } else {
         card.className      = 'result-card girl-card';
         em.textContent      = '👧💖🎊';
         headline.textContent = "IT'S A BABY SISTER!";
-        note.textContent    = "That's your pick! Screenshot this & text Jimmy below 👇";
+        note.textContent    = "Your pick is locked in! Text Jimmy below 👇";
         launchConfetti(['#FF5BAE','#ffffff','#FFE000','#C0206A']);
       }
 
+      updateVoteBars(votes);
+
       var rs = document.getElementById('resultSection');
       rs.classList.remove('show');
-      void rs.offsetWidth; // reflow to re-trigger animation
+      void rs.offsetWidth;
       rs.classList.add('show');
     }, 900);
   }
@@ -478,18 +791,15 @@
   function resetPicker() {
     currentPick = '';
     document.getElementById('btnRow').style.display = 'flex';
-    var rs = document.getElementById('resultSection');
-    rs.classList.remove('show');
+    document.getElementById('resultSection').classList.remove('show');
+    loadVotes();
   }
 
   function shareResult() {
-    var msg;
-    if (currentPick === 'boy') {
-      msg = "I think Noori's getting a BABY BROTHER! 👦💙 Cast your vote: " + SITE_URL;
-    } else {
-      msg = "I think Noori's getting a BABY SISTER! 👧💖 Cast your vote: " + SITE_URL;
-    }
-    // sms: URI — opens iMessage on iOS/macOS
+    var choiceWord = currentPick === 'brother' ? 'brother' : 'sister';
+    var choiceEmoji = currentPick === 'brother' ? '👦💙' : '👧💖';
+    var voteURL = SITE_URL + '?choice=' + choiceWord;
+    var msg = "I voted BABY " + choiceWord.toUpperCase() + "! " + choiceEmoji + " See all votes: " + voteURL;
     var smsUri = 'sms:+16098283047' + (navigator.platform.indexOf('Mac') === -1 ? '?' : '&') + 'body=' + encodeURIComponent(msg);
     window.location.href = smsUri;
   }
@@ -516,6 +826,76 @@
       })(i);
     }
   }
+
+  // ---- HLS VIDEO EMBED ----
+  function loadJellyVideo() {
+    fetch('/api/jelly')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (!data.hls) throw new Error('no hls');
+        var video = document.getElementById('jellyVideo');
+        if (Hls.isSupported()) {
+          var hls = new Hls();
+          hls.loadSource(data.hls);
+          hls.attachMedia(video);
+          hls.on(Hls.Events.ERROR, function(e, d) {
+            if (d.fatal) showFallback(data.thumbnail);
+          });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          video.src = data.hls;
+        } else {
+          showFallback(data.thumbnail);
+        }
+      })
+      .catch(function() {
+        showFallback('');
+      });
+  }
+
+  function showFallback(thumb) {
+    var video = document.getElementById('jellyVideo');
+    var fallback = document.getElementById('jellyFallback');
+    if (video) video.style.display = 'none';
+    if (fallback) {
+      fallback.style.display = 'block';
+      if (thumb) {
+        var img = document.getElementById('jellyThumb');
+        if (img) img.src = thumb;
+      }
+    }
+  }
+
+  // ---- INIT ----
+  document.addEventListener('DOMContentLoaded', function() {
+    loadVotes();
+    loadJellyVideo();
+
+    // If ?choice= in URL, auto-show that result
+    if (choiceParam === 'brother' || choiceParam === 'sister') {
+      currentPick = choiceParam;
+      var card     = document.getElementById('resultCard');
+      var em       = document.getElementById('resultEm');
+      var headline = document.getElementById('resultHeadline');
+      var note     = document.getElementById('resultNote');
+
+      if (choiceParam === 'brother') {
+        card.className      = 'result-card boy-card';
+        em.textContent      = '👦💙';
+        headline.textContent = "VOTED: BABY BROTHER!";
+        note.textContent    = "This person picked baby brother!";
+      } else {
+        card.className      = 'result-card girl-card';
+        em.textContent      = '👧💖';
+        headline.textContent = "VOTED: BABY SISTER!";
+        note.textContent    = "This person picked baby sister!";
+      }
+
+      document.getElementById('btnRow').style.display = 'none';
+      var rs = document.getElementById('resultSection');
+      rs.classList.add('show');
+      rs.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
 </script>
 </body>
 </html>
